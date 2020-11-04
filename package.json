@@ -1,0 +1,30 @@
+{
+  "name": "tree-sitter-pdmsg",
+  "version": "0.1.0",
+  "description": "pdmsg grammar for tree-sitter",
+  "keywords": [
+    "tree-sitter",
+    "parser"
+  ],
+  "main": "index.js",
+  "repository": "https://github.com/pndmix/tree-sitter-pdmsg",
+  "author": "Reo Matsumoto",
+  "license": "MIT",
+  "dependencies": {
+    "nan": "^2.14.2",
+    "prebuild-install": "^6.0.0"
+  },
+  "devDependencies": {
+    "prebuild": "^10.0.1",
+    "prettier": "^2.1.2",
+    "tree-sitter-cli": "^0.17.3"
+  },
+  "scripts": {
+    "install": "prebuild-install || node-gyp rebuild",
+    "prebuild": "prebuild -r electron -t 3.0.0 -t 4.0.0 -t 4.0.4 -t 5.0.0 --strip && prebuild -t 8.16.0 -t 10.12.0 --strip",
+    "prebuild:upload": "prebuild --upload-all",
+    "generate": "tree-sitter generate && node-gyp build",
+    "test": "tree-sitter test",
+    "format": "prettier -w *.{js,yml}"
+  }
+}

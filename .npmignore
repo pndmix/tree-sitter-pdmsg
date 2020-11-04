@@ -1,0 +1,11 @@
+build
+*.log
+parser.*
+
+corpus
+
+.appveyor.yml
+.travis.yml
+.gitattributes
+.prettierrc.yml
+.prettierignore
