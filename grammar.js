@@ -50,7 +50,7 @@ module.exports = grammar({
         ')'
       ),
 
-    expression: $ => choice($._expressions, $.keyword_identifier),
+    expression: $ => $._expressions,
 
     _expressions: $ =>
       choice(
@@ -61,7 +61,9 @@ module.exports = grammar({
         $.unary_operator,
         $.number,
         $.function,
-        $.identifier
+        $.identifier,
+        $.dollar_variable,
+        $.subpatch_variable
       ),
 
     parenthesized: $ => seq('(', $._expressions, ')'),
@@ -101,7 +103,8 @@ module.exports = grammar({
         $.parenthesized,
         $.number,
         $.function,
-        $.identifier
+        $.identifier,
+        $.dollar_variable
       )
       return choice(
         prec(PREC.unary, seq('~', patterns)),
@@ -122,21 +125,37 @@ module.exports = grammar({
       return choice(integer, float, exponent)
     },
 
-    function: $ => {
-      const base = /if|int|rint|float|min|max|abs/
-      const power = /pow|sqrt|exp|ln|log|log10|fact|cbrt|expm1|log1p|ldexp/
-      const trigonometric = /sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|asinh|acosh|atanh|floor|ceil|fmod/
-      return seq(alias(choice(base, power, trigonometric), $.name), $.arguments)
-    },
+    function: $ => seq(alias($.identifier, $.name), $.arguments),
 
     arguments: $ => seq('(', sep($._delimiter, $._expressions), ')'),
 
-    _delimiter: $ => ',',
+    dollar_variable: $ => {
+      const number = /\$([0-9]|[1-9][0-9]+)/
+      const expr = /\$[ifsv][1-9][0-9]*/
+      const fexpr = choice(
+        /\$[xy]/,
+        seq(
+          /\$x[1-9][0-9]*/,
+          optional(alias(seq('[', /[0-9]/, ']'), $.list_pattern))
+        )
+      )
+      return alias(choice(number, expr, fexpr), $.identifier)
+    },
+
+    subpatch_variable: $ =>
+      alias(
+        choice(
+          /pd-[!-'*-+\--\/0-z|~]/,
+          /pd-[!-#%-'*-+\--\/0-z|~][!-'*-+\--\/0-z|~]+/,
+          /pd-\$[0-9]*[!-'*-+\--\/:-z|~][!-'*-+\--\/0-z|~]*/
+        ),
+        $.identifier
+      ),
 
     identifier: $ => /[a-zA-Z_$]\w*/,
 
-    keyword_identifier: $ => choice('bang', 'connect'),
-
     comment: $ => seq('//', /.*/),
+
+    _delimiter: $ => ',',
   },
 })

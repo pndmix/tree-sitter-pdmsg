@@ -155,17 +155,8 @@
       ]
     },
     "expression": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_expressions"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "keyword_identifier"
-        }
-      ]
+      "type": "SYMBOL",
+      "name": "_expressions"
     },
     "_expressions": {
       "type": "CHOICE",
@@ -201,6 +192,14 @@
         {
           "type": "SYMBOL",
           "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dollar_variable"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "subpatch_variable"
         }
       ]
     },
@@ -645,6 +644,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "identifier"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "dollar_variable"
                   }
                 ]
               }
@@ -679,6 +682,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "identifier"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "dollar_variable"
                   }
                 ]
               }
@@ -713,6 +720,10 @@
                   {
                     "type": "SYMBOL",
                     "name": "identifier"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "dollar_variable"
                   }
                 ]
               }
@@ -796,21 +807,8 @@
         {
           "type": "ALIAS",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "if|int|rint|float|min|max|abs"
-              },
-              {
-                "type": "PATTERN",
-                "value": "pow|sqrt|exp|ln|log|log10|fact|cbrt|expm1|log1p|ldexp"
-              },
-              {
-                "type": "PATTERN",
-                "value": "sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|asinh|acosh|atanh|floor|ceil|fmod"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "identifier"
           },
           "named": true,
           "value": "name"
@@ -859,26 +857,97 @@
         }
       ]
     },
-    "_delimiter": {
-      "type": "STRING",
-      "value": ","
+    "dollar_variable": {
+      "type": "ALIAS",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "\\$([0-9]|[1-9][0-9]+)"
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\$[ifsv][1-9][0-9]*"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "\\$[xy]"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "PATTERN",
+                    "value": "\\$x[1-9][0-9]*"
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "["
+                            },
+                            {
+                              "type": "PATTERN",
+                              "value": "[0-9]"
+                            },
+                            {
+                              "type": "STRING",
+                              "value": "]"
+                            }
+                          ]
+                        },
+                        "named": true,
+                        "value": "list_pattern"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "named": true,
+      "value": "identifier"
+    },
+    "subpatch_variable": {
+      "type": "ALIAS",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "pd-[!-'*-+\\--\\/0-z|~]"
+          },
+          {
+            "type": "PATTERN",
+            "value": "pd-[!-#%-'*-+\\--\\/0-z|~][!-'*-+\\--\\/0-z|~]+"
+          },
+          {
+            "type": "PATTERN",
+            "value": "pd-\\$[0-9]*[!-'*-+\\--\\/:-z|~][!-'*-+\\--\\/0-z|~]*"
+          }
+        ]
+      },
+      "named": true,
+      "value": "identifier"
     },
     "identifier": {
       "type": "PATTERN",
       "value": "[a-zA-Z_$]\\w*"
-    },
-    "keyword_identifier": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "bang"
-        },
-        {
-          "type": "STRING",
-          "value": "connect"
-        }
-      ]
     },
     "comment": {
       "type": "SEQ",
@@ -892,6 +961,10 @@
           "value": ".*"
         }
       ]
+    },
+    "_delimiter": {
+      "type": "STRING",
+      "value": ","
     }
   },
   "extras": [
