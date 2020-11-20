@@ -13,8 +13,6 @@ const PREC = {
 
 const sep = (separator, rule) => seq(rule, repeat(seq(separator, rule)))
 
-const chain = rule => seq('.', sep('.', rule))
-
 module.exports = grammar({
   name: 'pdmsg',
 
@@ -27,11 +25,11 @@ module.exports = grammar({
   rules: {
     program: $ => repeat($.send_statement),
 
-    send_statement: $ => seq($.send_block, chain($.message_block)),
+    send_statement: $ => seq($.connect, '<<', sep('+', $.message)),
 
-    send_block: $ =>
+    connect: $ =>
       seq(
-        alias('send', $.keyword_identifier),
+        alias('C', $.keyword_identifier),
         '(',
         $.port,
         optional(seq($._delimiter, $.host)),
@@ -42,13 +40,7 @@ module.exports = grammar({
 
     host: $ => /[a-zA-Z0-9][a-zA-Z0-9.-]*/,
 
-    message_block: $ =>
-      seq(
-        alias('msg', $.keyword_identifier),
-        '(',
-        sep($._delimiter, $.expression),
-        ')'
-      ),
+    message: $ => seq('(', sep($._delimiter, $.expression), ')'),
 
     expression: $ => $._expressions,
 
@@ -63,7 +55,8 @@ module.exports = grammar({
         $.function,
         $.identifier,
         $.dollar_variable,
-        $.subpatch_variable
+        $.subpatch_variable,
+        $.string
       ),
 
     parenthesized: $ => seq('(', $._expressions, ')'),
@@ -115,6 +108,7 @@ module.exports = grammar({
 
     number: $ => {
       const integer = /[0-9]+/
+      const hex_literal = seq(choice('0x', '0X'), repeat1(/[a-fA-F0-9]+/))
       const float = /([1-9][0-9]*\.[0-9]*)|(0?\.[0-9]+)/
       const exponent = seq(
         choice(integer, float),
@@ -122,7 +116,7 @@ module.exports = grammar({
         optional(choice('-', '+')),
         integer
       )
-      return choice(integer, float, exponent)
+      return choice(integer, hex_literal, float, exponent)
     },
 
     function: $ => seq(alias($.identifier, $.name), $.arguments),
@@ -130,29 +124,24 @@ module.exports = grammar({
     arguments: $ => seq('(', sep($._delimiter, $._expressions), ')'),
 
     dollar_variable: $ => {
-      const number = /\$([0-9]|[1-9][0-9]+)/
-      const expr = /\$[ifsv][1-9][0-9]*/
-      const fexpr = choice(
-        /\$[xy]/,
-        seq(
-          /\$x[1-9][0-9]*/,
-          optional(alias(seq('[', /[0-9]/, ']'), $.list_pattern))
-        )
+      const number = alias(/\$([0-9]|[1-9][0-9]+)/, $.identifier)
+      const expr = alias(/\$[ifsv][1-9][0-9]*/, $.identifier)
+      const fexpr = seq(
+        alias(/\$[xy]([1-9][0-9]*)?/, $.identifier),
+        optional($.index_pattern)
       )
-      return alias(choice(number, expr, fexpr), $.identifier)
+      return choice(number, expr, fexpr)
     },
 
-    subpatch_variable: $ =>
-      alias(
-        choice(
-          /pd-[!-'*-+\--\/0-z|~]/,
-          /pd-[!-#%-'*-+\--\/0-z|~][!-'*-+\--\/0-z|~]+/,
-          /pd-\$[0-9]*[!-'*-+\--\/:-z|~][!-'*-+\--\/0-z|~]*/
-        ),
-        $.identifier
-      ),
+    index_pattern: $ => seq('[', alias(/-?[0-9]+/, $.index), ']'),
 
-    identifier: $ => /[a-zA-Z_$]\w*/,
+    subpatch_variable: $ => alias(/pd-[a-zA-Z_$][a-zA-Z_$0-9~]*/, $.identifier),
+
+    string: $ => seq('"', optional($.string_content), '"'),
+
+    string_content: $ => repeat1(token.immediate(/[^"\n]+/)),
+
+    identifier: $ => /[a-zA-Z_$][a-zA-Z_$0-9~]*/,
 
     comment: $ => seq('//', /.*/),
 

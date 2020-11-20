@@ -40,6 +40,10 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subpatch_variable",
           "named": true
         },
@@ -91,6 +95,10 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subpatch_variable",
           "named": true
         },
@@ -139,6 +147,10 @@
         },
         {
           "type": "parenthesized",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {
@@ -198,11 +210,38 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subpatch_variable",
           "named": true
         },
         {
           "type": "unary_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "connect",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "host",
+          "named": true
+        },
+        {
+          "type": "keyword_identifier",
+          "named": true
+        },
+        {
+          "type": "port",
           "named": true
         }
       ]
@@ -221,7 +260,7 @@
           "named": true
         },
         {
-          "type": "list_pattern",
+          "type": "index_pattern",
           "named": true
         }
       ]
@@ -268,6 +307,10 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subpatch_variable",
           "named": true
         },
@@ -298,7 +341,22 @@
     }
   },
   {
-    "type": "message_block",
+    "type": "index_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "index",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "message",
     "named": true,
     "fields": {},
     "children": {
@@ -307,10 +365,6 @@
       "types": [
         {
           "type": "expression",
-          "named": true
-        },
-        {
-          "type": "keyword_identifier",
           "named": true
         }
       ]
@@ -362,6 +416,10 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "subpatch_variable",
           "named": true
         },
@@ -393,29 +451,6 @@
     }
   },
   {
-    "type": "send_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "host",
-          "named": true
-        },
-        {
-          "type": "keyword_identifier",
-          "named": true
-        },
-        {
-          "type": "port",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "send_statement",
     "named": true,
     "fields": {},
@@ -424,15 +459,35 @@
       "required": true,
       "types": [
         {
-          "type": "message_block",
+          "type": "connect",
           "named": true
         },
         {
-          "type": "send_block",
+          "type": "message",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "string_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "string_content",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "subpatch_variable",
@@ -489,6 +544,10 @@
     "named": false
   },
   {
+    "type": "\"",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -521,15 +580,19 @@
     "named": false
   },
   {
-    "type": ".",
-    "named": false
-  },
-  {
     "type": "/",
     "named": false
   },
   {
     "type": "//",
+    "named": false
+  },
+  {
+    "type": "0X",
+    "named": false
+  },
+  {
+    "type": "0x",
     "named": false
   },
   {
@@ -565,6 +628,14 @@
     "named": false
   },
   {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
     "type": "^",
     "named": false
   },
@@ -581,11 +652,11 @@
     "named": true
   },
   {
-    "type": "keyword_identifier",
+    "type": "index",
     "named": true
   },
   {
-    "type": "list_pattern",
+    "type": "keyword_identifier",
     "named": true
   },
   {
