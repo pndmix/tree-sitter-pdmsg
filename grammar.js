@@ -16,16 +16,16 @@ const sep = (separator, rule) => seq(rule, repeat(seq(separator, rule)))
 module.exports = grammar({
   name: 'pdmsg',
 
-  extras: $ => [/[\s\n]/, $.comment],
+  extras: $ => [/\s|\r?\n/, $.comment],
 
   inline: $ => [$._expressions],
 
   word: $ => $.identifier,
 
   rules: {
-    program: $ => repeat($.send_statement),
+    program: $ => repeat($.statement),
 
-    send_statement: $ => seq($.connect, '<<', sep('+', $.message)),
+    statement: $ => seq($.connect, '<<', sep('+', $.message)),
 
     connect: $ =>
       seq(
@@ -135,11 +135,21 @@ module.exports = grammar({
 
     index_pattern: $ => seq('[', alias(/-?[0-9]+/, $.index), ']'),
 
-    subpatch_variable: $ => alias(/pd-[a-zA-Z_$][a-zA-Z_$0-9~]*/, $.identifier),
+    subpatch_variable: $ => alias(/pd-[^(){},\s]+/, $.identifier),
 
-    string: $ => seq('"', optional($.string_content), '"'),
-
-    string_content: $ => repeat1(token.immediate(/[^"\n]+/)),
+    string: $ =>
+      choice(
+        seq(
+          '"',
+          alias(repeat1(token.immediate(/[^"\n]+/)), $.string_content),
+          '"'
+        ),
+        seq(
+          "'",
+          alias(repeat1(token.immediate(/[^'\n]+/)), $.string_content),
+          "'"
+        )
+      ),
 
     identifier: $ => /[a-zA-Z_$][a-zA-Z_$0-9~]*/,
 

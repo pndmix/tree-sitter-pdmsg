@@ -444,14 +444,14 @@
       "required": false,
       "types": [
         {
-          "type": "send_statement",
+          "type": "statement",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "send_statement",
+    "type": "statement",
     "named": true,
     "fields": {},
     "children": {
@@ -475,7 +475,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "string_content",
@@ -557,6 +557,10 @@
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {
