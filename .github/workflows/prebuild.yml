@@ -28,8 +28,6 @@ jobs:
       - name: Unit tests
         run: yarn test
 
-  prebuild:
-    needs: [test]
-    steps:
-      - name: Prebuild binaries
-        run: yarn prebuild
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Upload prebuild binaries
+        run: yarn prebuild:upload -u ${{ secrets.GITHUB_TOKEN }}
