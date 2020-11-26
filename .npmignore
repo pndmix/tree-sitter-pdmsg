@@ -4,8 +4,7 @@ parser.*
 
 corpus
 
-.appveyor.yml
-.travis.yml
+.github
 .gitattributes
 .prettierrc.yml
 .prettierignore
