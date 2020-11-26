@@ -32,12 +32,11 @@ jobs:
         run: yarn test
 
       - name: Prebuild binaries
-        if: startsWith(github.ref, 'refs/tags/v') != true
         run: yarn prebuild
 
       - name: Upload prebuild binaries
         if: startsWith(github.ref, 'refs/tags/v')
-        run: yarn prebuild:upload -u ${{ secrets.PREBUILD_TOKEN }}
+        run: yarn prebuild:upload -u ${{ secrets.GITHUB_TOKEN }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
