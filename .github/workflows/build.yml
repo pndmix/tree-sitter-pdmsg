@@ -1,9 +1,11 @@
-name: Main CI
+name: build
 
 on:
   push:
     branches:
       - main
+    tags:
+      - v*
 
 jobs:
   prebuild:
@@ -36,3 +38,26 @@ jobs:
       - name: Upload prebuild binaries
         if: startsWith(github.ref, 'refs/tags/v')
         run: yarn prebuild:upload -u ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: prebuild
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish packages
+        run: |
+          yarn install --frozen-lockfile
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
