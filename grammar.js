@@ -27,14 +27,10 @@ module.exports = grammar({
 
     statement: $ => seq($.connect, '<<', sep('+', $.message)),
 
-    connect: $ =>
-      seq(
-        alias('C', $.keyword_identifier),
-        '(',
-        $.port,
-        optional(seq($._delimiter, $.host)),
-        ')'
-      ),
+    connect: $ => seq(alias('C', $.keyword_identifier), $.connect_arguments),
+
+    connect_arguments: $ =>
+      seq('(', $.port, optional(seq($._delimiter, $.host)), ')'),
 
     port: $ => /[0-9]+/,
 

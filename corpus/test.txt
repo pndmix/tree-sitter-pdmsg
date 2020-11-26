@@ -18,7 +18,7 @@ C(5005) <<
 ---
 (program
   (statement
-    (connect (keyword_identifier) (port))
+    (connect (keyword_identifier) (connect_arguments (port)))
     (message
       (expression
         (binary_operator (binary_operator (dollar_variable (identifier)) (number)) (number)))

@@ -60,6 +60,15 @@
           "value": "keyword_identifier"
         },
         {
+          "type": "SYMBOL",
+          "name": "connect_arguments"
+        }
+      ]
+    },
+    "connect_arguments": {
+      "type": "SEQ",
+      "members": [
+        {
           "type": "STRING",
           "value": "("
         },
