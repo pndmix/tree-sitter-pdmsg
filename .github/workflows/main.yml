@@ -30,7 +30,7 @@ jobs:
         run: yarn test
 
       - name: Prebuild binaries
-        if: !startsWith(github.ref , 'refs/tags/v')
+        if: !(startsWith(github.ref , 'refs/tags/v'))
         run: yarn prebuild
 
       - name: Upload prebuild binaries
