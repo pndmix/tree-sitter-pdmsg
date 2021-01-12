@@ -40,11 +40,54 @@
           "named": true
         },
         {
-          "type": "string",
+          "type": "unary_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "assign_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operator",
           "named": true
         },
         {
-          "type": "subpatch_variable",
+          "type": "boolean_operator",
+          "named": true
+        },
+        {
+          "type": "comparison_operator",
+          "named": true
+        },
+        {
+          "type": "dollar_variable",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parenthesized",
+          "named": true
+        },
+        {
+          "type": "semicolon",
           "named": true
         },
         {
@@ -95,14 +138,6 @@
           "named": true
         },
         {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "subpatch_variable",
-          "named": true
-        },
-        {
           "type": "unary_operator",
           "named": true
         }
@@ -147,14 +182,6 @@
         },
         {
           "type": "parenthesized",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "subpatch_variable",
           "named": true
         },
         {
@@ -207,14 +234,6 @@
         },
         {
           "type": "parenthesized",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "subpatch_variable",
           "named": true
         },
         {
@@ -286,9 +305,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "assign_statement",
+          "named": true
+        },
         {
           "type": "binary_operator",
           "named": true
@@ -318,7 +341,15 @@
           "named": true
         },
         {
+          "type": "operator",
+          "named": true
+        },
+        {
           "type": "parenthesized",
+          "named": true
+        },
+        {
+          "type": "semicolon",
           "named": true
         },
         {
@@ -391,6 +422,11 @@
     "fields": {}
   },
   {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "parenthesized",
     "named": true,
     "fields": {},
@@ -428,14 +464,6 @@
         },
         {
           "type": "parenthesized",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "subpatch_variable",
           "named": true
         },
         {
@@ -591,11 +619,23 @@
     "named": false
   },
   {
+    "type": "*~",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
   {
+    "type": "+~",
+    "named": false
+  },
+  {
     "type": "-",
+    "named": false
+  },
+  {
+    "type": "-~",
     "named": false
   },
   {
@@ -604,6 +644,10 @@
   },
   {
     "type": "//",
+    "named": false
+  },
+  {
+    "type": "/~",
     "named": false
   },
   {
@@ -624,6 +668,10 @@
   },
   {
     "type": "<=",
+    "named": false
+  },
+  {
+    "type": "=",
     "named": false
   },
   {
@@ -659,6 +707,10 @@
     "named": false
   },
   {
+    "type": "div",
+    "named": false
+  },
+  {
     "type": "e",
     "named": false
   },
@@ -679,7 +731,35 @@
     "named": true
   },
   {
+    "type": "max",
+    "named": false
+  },
+  {
+    "type": "max~",
+    "named": false
+  },
+  {
+    "type": "min",
+    "named": false
+  },
+  {
+    "type": "min~",
+    "named": false
+  },
+  {
+    "type": "mod",
+    "named": false
+  },
+  {
     "type": "name",
+    "named": true
+  },
+  {
+    "type": "pow",
+    "named": false
+  },
+  {
+    "type": "semicolon",
     "named": true
   },
   {

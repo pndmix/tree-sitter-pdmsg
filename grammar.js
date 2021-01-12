@@ -27,7 +27,7 @@ module.exports = grammar({
 
     statement: $ => seq($.connect, '<<', sep('+', $.message)),
 
-    connect: $ => seq(alias('C', $.keyword_identifier), $.connect_arguments),
+    connect: $ => seq(alias('Cn', $.keyword_identifier), $.connect_arguments),
 
     connect_arguments: $ =>
       seq('(', $.port, optional(seq($._delimiter, $.host)), ')'),
@@ -38,7 +38,45 @@ module.exports = grammar({
 
     message: $ => seq('(', sep($._delimiter, $.expression), ')'),
 
-    expression: $ => $._expressions,
+    expression: $ =>
+      choice(
+        $.subpatch_variable,
+        $.operator,
+        $.string,
+        $.semicolon,
+        $.assign_statement,
+        seq($._expressions, optional($.semicolon))
+      ),
+
+    subpatch_variable: $ => alias(/pd-[^(){},\s]+/, $.identifier),
+
+    operator: $ => {
+      const arithmetic = choice('+', '-', '*', '/', 'pow', 'max', 'min')
+      const signal = choice('+~', '-~', '*~', '/~', 'max~', 'min~')
+      const binary = choice('>', '>=', '<', '<=', '==', '!=', 'div', 'mod')
+      const logical = choice('&&', '||')
+      const bitwise = choice('&', '|', '<<', '>>')
+      return choice(arithmetic, signal, binary, logical, bitwise)
+    },
+
+    string: $ =>
+      choice(
+        seq(
+          '"',
+          alias(repeat1(token.immediate(/[^"\n]+/)), $.string_content),
+          '"'
+        ),
+        seq(
+          "'",
+          alias(repeat1(token.immediate(/[^'\n]+/)), $.string_content),
+          "'"
+        )
+      ),
+
+    semicolon: $ => ';',
+
+    assign_statement: $ =>
+      seq($.identifier, '=', $._expressions, optional($.semicolon)),
 
     _expressions: $ =>
       choice(
@@ -50,9 +88,7 @@ module.exports = grammar({
         $.number,
         $.function,
         $.identifier,
-        $.dollar_variable,
-        $.subpatch_variable,
-        $.string
+        $.dollar_variable
       ),
 
     parenthesized: $ => seq('(', $._expressions, ')'),
@@ -131,23 +167,7 @@ module.exports = grammar({
 
     index_pattern: $ => seq('[', alias(/-?[0-9]+/, $.index), ']'),
 
-    subpatch_variable: $ => alias(/pd-[^(){},\s]+/, $.identifier),
-
-    string: $ =>
-      choice(
-        seq(
-          '"',
-          alias(repeat1(token.immediate(/[^"\n]+/)), $.string_content),
-          '"'
-        ),
-        seq(
-          "'",
-          alias(repeat1(token.immediate(/[^'\n]+/)), $.string_content),
-          "'"
-        )
-      ),
-
-    identifier: $ => /[a-zA-Z_$][a-zA-Z_$0-9~]*/,
+    identifier: $ => /[a-zA-Z][a-zA-Z_0-9]*~?/,
 
     comment: $ => seq('//', /.*/),
 
