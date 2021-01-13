@@ -12,22 +12,22 @@ comment
 statement
 ========
 
-C(5005) <<
-  ($v1*8000*4, sin(1000 / ($v1%4000)*2))
+Cn(3005) << (pd-ex, obj, 10, 10, osc~, 440) + (pd-ex, obj, 10, 60, dac~)
 
 ---
 (program
   (statement
     (connect (keyword_identifier) (connect_arguments (port)))
     (message
-      (expression
-        (binary_operator (binary_operator (dollar_variable (identifier)) (number)) (number)))
-      (expression
-        (function (name)
-          (arguments
-            (binary_operator
-              (binary_operator
-                (number)
-                (parenthesized
-                  (binary_operator (dollar_variable (identifier)) (number))))
-              (number))))))))
+      (expression (subpatch_variable (identifier)))
+      (expression (identifier))
+      (expression (number))
+      (expression (number))
+      (expression (identifier))
+      (expression (number)))
+    (message
+      (expression (subpatch_variable (identifier)))
+      (expression (identifier))
+      (expression (number))
+      (expression (number))
+      (expression (identifier)))))

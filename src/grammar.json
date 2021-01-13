@@ -169,8 +169,25 @@
           "name": "semicolon"
         },
         {
-          "type": "SYMBOL",
-          "name": "assign_statement"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "assign_statement"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "semicolon"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "SEQ",
@@ -421,18 +438,6 @@
         {
           "type": "SYMBOL",
           "name": "_expressions"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "semicolon"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
         }
       ]
     },

@@ -44,7 +44,7 @@ module.exports = grammar({
         $.operator,
         $.string,
         $.semicolon,
-        $.assign_statement,
+        seq($.assign_statement, optional($.semicolon)),
         seq($._expressions, optional($.semicolon))
       ),
 
@@ -75,8 +75,7 @@ module.exports = grammar({
 
     semicolon: $ => ';',
 
-    assign_statement: $ =>
-      seq($.identifier, '=', $._expressions, optional($.semicolon)),
+    assign_statement: $ => seq($.identifier, '=', $._expressions),
 
     _expressions: $ =>
       choice(

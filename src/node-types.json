@@ -87,10 +87,6 @@
           "named": true
         },
         {
-          "type": "semicolon",
-          "named": true
-        },
-        {
           "type": "unary_operator",
           "named": true
         }
